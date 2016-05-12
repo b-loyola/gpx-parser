@@ -1,8 +1,9 @@
 require 'nokogiri'
 require 'open-uri'
 # require 'byebug'
+require 'awesome_print'
 
-class Parser
+class GpxParser
 
 	def self.wrong_number_args?(args_array)
 		args_array.size != 1
@@ -15,9 +16,9 @@ class Parser
 	def extract_coordinates(gpx_source)
 		waypoints = []
 		gpx_source.css("trkpt").each do |waypoint|
-			coords = []
-			coords << waypoint.attribute("lat").value
-			coords << waypoint.attribute("lon").value
+			coords = {}
+			coords[:lat] = waypoint.attribute("lat").value.to_f
+			coords[:lon] = waypoint.attribute("lon").value.to_f
 			waypoints << coords
 		end
 		waypoints
@@ -31,14 +32,14 @@ class Parser
 
 end
 
-if Parser.wrong_number_args?(ARGV)
+if GpxParser.wrong_number_args?(ARGV)
 	puts "wrong number of arguments"
 	puts "correct usage: ruby gpx_parser.rb http://www.example.com"
 else
-	parser = Parser.new(ARGV[0])
+	parser = GpxParser.new(ARGV[0])
 	coordinates = parser.parse
 
 	coordinates.each do |pair|
-		puts "Coords: #{pair}"
+		ap pair
 	end
 end
