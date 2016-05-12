@@ -13,7 +13,7 @@ target_page = Nokogiri::HTML(open('index.html'))
 target_page_hike_list = target_page.css("table tr td a")
 
 
-# function to collect URLs from search page, input: table of hikes; output: array of hike URLs
+# function to collect URLs from search page, input: table of hikes; output: array of hike URLs formatted to add to TARGET_DOMAIN
 def get_urls(target)
   trail_urls = []
   i = 24
@@ -29,7 +29,7 @@ def get_urls(target)
 end
 
 
-
+# function to build new hike objects, input: array of hike URLs; opens each and scrapes data to create new hike object for each link provided.
 def trail_builder(urls)
   urls.each do |trail|
     page = Nokogiri::HTML(open(TARGET_DOMAIN + trail))
